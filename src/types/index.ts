@@ -1,15 +1,3 @@
-// Common types used across the application
+// Type definitions will be exported from here
+export {};
 
-export interface User {
-  id: string
-  name: string
-  email: string
-}
-
-export interface RouteConfig {
-  path: string
-  element: React.ComponentType
-  isPrivate?: boolean
-}
-
-// Add more types as needed

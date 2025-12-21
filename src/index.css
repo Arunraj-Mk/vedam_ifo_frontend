@@ -1,60 +1,47 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@layer base {
-  :root {
-    font-family: Poppins, sans-serif;
-  }
-  
-  body {
-    @apply min-h-screen;
-    font-family: Poppins, sans-serif;
-  }
-  
-  #root {
-    @apply w-full;
-  }
-  
-  * {
-    font-family: Poppins, sans-serif;
-  }
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-/* Blob Button Effect Styles */
-.blob-btn {
-  position: relative;
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
 }
 
-.blob-btn__blob {
-  position: absolute;
-  display: block;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
-  transform: translate(-50%, -50%);
-  z-index: -1;
-  opacity: 0;
+::-webkit-scrollbar-thumb {
+  background: #04684C;
+  border-radius: 5px;
 }
 
-.blob-btn:hover {
-  color: #256BF1 !important;
+::-webkit-scrollbar-thumb:hover {
+  background: #035a45;
 }
 
-.blob-btn:hover span {
-  color: #256BF1 !important;
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #04684C #1a1a1a;
 }
 
-.blob-btn:hover svg {
-  stroke: #256BF1;
+/* Custom scrollbar class for specific containers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
 }
 
-.blob-btn:hover .blob-btn__blob {
-  width: 300px;
-  height: 300px;
-  opacity: 1;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.blob-btn:active {
-  background-color: rgba(37, 107, 241, 0.8);
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #04684C;
+  border-radius: 4px;
 }
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #035a45;
+}
+

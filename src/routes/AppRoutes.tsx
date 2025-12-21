@@ -1,16 +1,15 @@
-import { Routes, Route } from 'react-router-dom'
-import PublicRoutes from './PublicRoutes'
-import PrivateRoutes from './PrivateRoutes'
+import { Routes, Route } from 'react-router-dom';
+import TestPage from '@/pages/test/TestPage';
+import HomePage from '@/pages/home/HomePage';
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Private routes */}
-      <Route path="/dashboard/*" element={<PrivateRoutes />} />
-      {/* Public routes - catch all other paths */}
-      <Route path="/*" element={<PublicRoutes />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/test" element={<TestPage />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default AppRoutes
+export default AppRoutes;
+
