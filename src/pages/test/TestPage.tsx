@@ -1,10 +1,9 @@
-import TestHeader from './components/TestHeader';
+import React from 'react';
 import TestContent from './components/TestContent';
 
-const TestPage = () => {
+const TestPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <TestHeader />
+    <div className=" bg-gray-50">
       <TestContent />
     </div>
   );

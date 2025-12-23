@@ -1,3 +1,6 @@
-// API service functions will be exported from here
-export {};
+/**
+ * Services Export
+ * Centralized export for all service modules
+ */
 
+export * from './auth.service';

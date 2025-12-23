@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardHeaderProps {
   userName?: string;
@@ -9,6 +10,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   userName = 'User',
   userAvatar,
 }) => {
+  const navigate = useNavigate();
+
+  const handleAvatarClick = () => {
+    navigate('/profile');
+  };
+
   return (
     <div className="fixed top-0 left-16 right-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-30">
       {/* Search Bar */}
@@ -38,7 +45,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       {/* Right Section - Profile */}
       <div className="flex items-center gap-4">
         {/* Profile Picture */}
-        <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden border-2 border-gray-200">
+        <button
+          onClick={handleAvatarClick}
+          className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden border-2 border-gray-200 hover:border-[#02947B] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#02947B] focus:ring-offset-2"
+          aria-label="Go to profile"
+        >
           {userAvatar ? (
             <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
           ) : (
@@ -46,7 +57,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               {userName.charAt(0).toUpperCase()}
             </div>
           )}
-        </div>
+        </button>
       </div>
     </div>
   );

@@ -2,19 +2,6 @@ import { Link } from 'react-router-dom';
 import vedhamInfoImage from '@/assets/images/vedham_info.jpeg?url';
 
 const Footer = () => {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
   return (
     <footer id="contact" className="relative text-primary">
     {/* Wavy Top Border */}

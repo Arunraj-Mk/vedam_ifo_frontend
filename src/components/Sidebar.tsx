@@ -6,6 +6,7 @@ import pageIcon from '@/assets/svgs/sidebar/Page.svg?url';
 import reportsIcon from '@/assets/svgs/sidebar/Reports.svg?url';
 import helpIcon from '@/assets/svgs/sidebar/Help-circle.svg?url';
 import logoutIcon from '@/assets/svgs/sidebar/Log-out.svg?url';
+import { useLogout } from '@/hooks/useAuth';
 
 interface SidebarItem {
   icon: string;
@@ -21,6 +22,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ items }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const logoutMutation = useLogout();
 
   const defaultItems: SidebarItem[] = [
     {
@@ -31,12 +33,12 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     {
       icon: homeIcon,
       label: 'Home',
-      path: '/',
+      path: '/dashboard',
     },
     {
       icon: pageIcon,
       label: 'Tests',
-      path: '/tests',
+      path: '/test',
     },
     {
       icon: reportsIcon,
@@ -68,10 +70,19 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     return location.pathname.startsWith(path);
   };
 
+  const handleItemClick = (item: SidebarItem) => {
+    if (item.path === '/logout') {
+      logoutMutation.mutate();
+    } else {
+      navigate(item.path);
+    }
+  };
+
   const renderIconButton = (item: SidebarItem, index: number) => (
     <button
       key={index}
-      onClick={() => navigate(item.path)}
+      onClick={() => handleItemClick(item)}
+      disabled={item.path === '/logout' && logoutMutation.isPending}
       className={`
         w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200
         ${
@@ -79,6 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
             ? 'bg-[#4B9C91] shadow-lg'
             : 'bg-gray-100 hover:bg-gray-200'
         }
+        ${logoutMutation.isPending && item.path === '/logout' ? 'opacity-50 cursor-not-allowed' : ''}
       `}
       title={item.label}
     >

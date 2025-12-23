@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import LoginInput from '@/pages/login/components/LoginInput';
 import ArrowButton from '@/components/ArrowButton';
+import { useRegister } from '@/hooks/useAuth';
 
 interface RegistrationFormData {
   studentName: string;
@@ -13,10 +14,12 @@ interface RegistrationFormData {
 }
 
 const RegistrationCard: React.FC = () => {
+  const registerMutation = useRegister();
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<RegistrationFormData>({
     mode: 'onBlur',
     defaultValues: {
@@ -29,8 +32,13 @@ const RegistrationCard: React.FC = () => {
   });
 
   const onSubmit = (data: RegistrationFormData) => {
-    // TODO: Implement registration logic
-    console.log('Registration data:', data);
+    registerMutation.mutate({
+      name: data.studentName,
+      email: data.email,
+      classGrade: data.classGrade,
+      phone: data.phoneNumber,
+      schoolName: data.schoolName,
+    });
   };
 
   return (
@@ -182,13 +190,14 @@ const RegistrationCard: React.FC = () => {
       {/* Submit Button Group */}
       <div className="flex items-center justify-start gap-3 sm:gap-4">
         <ArrowButton
-          text="Create Account"
+          text={isSubmitting || registerMutation.isPending ? 'Creating Account...' : 'Create Account'}
           bgColor="#00B512"
           textColor="#F9FAFB"
           arrowBgColor="#FBF9F1"
           arrowColor="#000000"
           type="submit"
-          className="self-start font-semibold text-[17.39px] leading-[150%] font-poppins h-[56.52px] min-w-[194.57px] px-[26.09px] py-[26.09px] rounded-[47.83px] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#00B512] focus:ring-offset-2"
+          disabled={isSubmitting || registerMutation.isPending}
+          className="self-start font-semibold text-[17.39px] leading-[150%] font-poppins h-[56.52px] min-w-[194.57px] px-[26.09px] py-[26.09px] rounded-[47.83px] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#00B512] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           size="lg"
         />
       </div>

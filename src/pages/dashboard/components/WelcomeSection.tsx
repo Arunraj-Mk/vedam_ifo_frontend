@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DashboardBadge from '@/components/DashboardBadge';
 
 interface WelcomeSectionProps {
   studentName?: string;
@@ -31,17 +32,6 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const getBadgeStyles = (variant: string = 'default') => {
-    switch (variant) {
-      case 'success':
-        return 'bg-[#E3FCEE] text-[#069745]';
-      case 'info':
-        return 'bg-[#1F4EB91A] text-[#1F4EB9] ';
-      default:
-        return 'bg-gray-50 text-[#6E757C] border border-gray-200';
-    }
-  };
-
   return (
     <div className="bg-white rounded-lg p-6 mb-6">
       {/* Welcome Message and Action Buttons */}
@@ -62,7 +52,7 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({
           </button>
           <button
             onClick={onStartNewTest}
-            className="px-4 py-2 bg-[#00B512] text-white rounded-lg hover:bg-[#009a0f] transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-[#4B9C91] text-white rounded-lg hover:bg-[#009a0f] transition-colors flex items-center gap-2"
           >
             Start New Test
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,13 +85,12 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({
       {/* Badges */}
       <div className="flex flex-wrap gap-3">
         {badges.map((badge, index) => (
-          <div
+          <DashboardBadge
             key={index}
-            className={`px-3 py-1 rounded-full flex items-center gap-2 ${getBadgeStyles(badge.variant)}`}
-          >
-            {badge.icon && <span>{badge.icon}</span>}
-            <span className="text-sm font-medium">{badge.label}</span>
-          </div>
+            label={badge.label}
+            icon={badge.icon}
+            variant={badge.variant}
+          />
         ))}
       </div>
     </div>

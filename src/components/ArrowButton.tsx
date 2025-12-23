@@ -10,6 +10,7 @@ interface ArrowButtonProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({ 
@@ -21,7 +22,8 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({
   onClick,
   className = "",
   size = "lg",
-  type = "button"
+  type = "button",
+  disabled = false
 }) => {
   
   const sizeClasses: Record<'sm' | 'md' | 'lg', { button: string; arrow: string; icon: number }> = {
@@ -48,14 +50,15 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      className={`relative inline-flex items-center justify-center font-normal transition-transform hover:scale-105 active:scale-95 ${currentSize.button} ${className}`}
+      disabled={disabled}
+      className={`relative inline-flex items-center justify-center font-normal transition-transform ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'} ${currentSize.button} ${className}`}
       style={{
         backgroundColor: bgColor,
         color: textColor,
         borderRadius: '9999px',
         paddingRight: `calc(${currentSize.arrow.split(' ')[0].replace('w-', '')} * 0.25rem + 1rem)`,
         border: 'none',
-        cursor: 'pointer'
+        cursor: disabled ? 'not-allowed' : 'pointer'
       }}
     >
       <span className="relative z-10 text-center">{text}</span>

@@ -6,6 +6,7 @@ export interface KPIData {
   icon?: React.ReactNode;
 }
 
+
 interface KPICardsProps {
   data: KPIData[];
 }
@@ -36,4 +37,5 @@ const KPICards: React.FC<KPICardsProps> = ({ data }) => {
 };
 
 export default KPICards;
+
 

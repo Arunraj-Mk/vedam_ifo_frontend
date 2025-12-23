@@ -61,7 +61,7 @@ const BarChart: React.FC<BarChartProps> = ({
             borderRadius: '8px',
             padding: '8px 12px',
           }}
-          formatter={(value: number) => [`${value}%`, 'Performance']}
+          formatter={(value: number | undefined) => [`${value ?? 0}%`, 'Performance']}
         />
         {showLegend && <Legend />}
         <Bar

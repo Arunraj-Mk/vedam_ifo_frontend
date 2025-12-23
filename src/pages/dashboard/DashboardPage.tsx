@@ -1,13 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import WelcomeSection from './components/WelcomeSection';
-import KPICards, { KPIData } from './components/KPICards';
+import PerformanceSummaryCards, { PerformanceSummaryData } from '@/pages/analytics/components/PerformanceSummaryCards';
 import TestHistoryTable, { TestHistoryItem } from './components/TestHistoryTable';
 import PerformanceChart from './components/PerformanceChart';
 import { BarChartData } from '@/components/BarChart';
 
 const DashboardPage: React.FC = () => {
+  const navigate = useNavigate();
+
   // Sample data - replace with actual API calls
-  const kpiData: KPIData[] = [
+  const kpiData: PerformanceSummaryData[] = [
     {
       label: 'Tests Completed',
       value: '5',
@@ -68,8 +71,7 @@ const DashboardPage: React.FC = () => {
   ];
 
   const handleViewTestHistory = () => {
-    // TODO: Navigate to test history page
-    console.log('View test history');
+    navigate('/profile');
   };
 
   const handleStartNewTest = () => {
@@ -109,7 +111,7 @@ const DashboardPage: React.FC = () => {
         onStartNewTest={handleStartNewTest}
       />
 
-      <KPICards data={kpiData} />
+      <PerformanceSummaryCards data={kpiData} columns={3} />
 
       <TestHistoryTable tests={testHistory} onViewMore={handleViewMore} />
 
