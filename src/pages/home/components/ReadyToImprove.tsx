@@ -1,7 +1,12 @@
 import readyToImproveSvg from '@/assets/svgs/ready_to_improve.svg?url';
 import ArrowButton from '@/components/ArrowButton';
+import { Link } from 'react-router-dom';
 
-const ReadyToImprove = () => {
+interface ReadyToImproveProps {
+  showContactUs?: boolean;
+}
+
+const ReadyToImprove: React.FC<ReadyToImproveProps> = ({ showContactUs = false }) => {
   return (
     <div className="p-2">
       <section
@@ -21,16 +26,24 @@ const ReadyToImprove = () => {
             <p className="text-base md:text-lg mb-8 text-white/90 max-w-lg mx-auto lg:mx-0 leading-relaxed">
               Join thousands of students who are already practicing with Vedam Info.
             </p>
-            <div className="flex justify-center lg:justify-start">
-              <ArrowButton 
-                text="Get Started"
-                bgColor="#00C853"
-                textColor="#FFFFFF"
-                arrowBgColor="#F5F5DC"
-                arrowColor="#333333"
-                size="md"
-                onClick={() => alert('Button clicked!')}
-              />
+            <div className={`flex ${showContactUs ? 'flex-col sm:flex-row' : ''} gap-4 justify-center lg:justify-start`}>
+              <Link to="/get-started">
+                <ArrowButton 
+                  text="Get Started"
+                  bgColor="#00C853"
+                  textColor="#FFFFFF"
+                  arrowBgColor="#F5F5DC"
+                  arrowColor="#333333"
+                  size="md"
+                />
+              </Link>
+              {showContactUs && (
+                <Link to="/contact">
+                  <button className="px-6 mx-12 sm:my-0 py-3 rounded-[44px] border-[0.8px] border-[#00B512] bg-transparent text-[#00B512] font-semibold text-base leading-[150%] font-poppins hover:bg-[#00B512] hover:text-white transition-all whitespace-nowrap">
+                    Contact Us
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
 

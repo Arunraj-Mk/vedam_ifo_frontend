@@ -48,37 +48,37 @@ const Navbar = () => {
             >
               Home
             </a>
-            <a
-              href="#about"
-              onClick={(e) => handleNavClick(e, 'about')}
+            <Link
+              to="/about"
               className="text-gray-300 hover:text-white transition-colors font-medium text-sm lg:text-base cursor-pointer"
             >
               About us
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => handleNavClick(e, 'contact')}
+            </Link>
+            <Link
+              to="/contact"
               className="text-gray-300 hover:text-white transition-colors font-medium text-sm lg:text-base cursor-pointer"
             >
               Contact
-            </a>
+            </Link>
           </div>
 
           <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
-            <Button
-              variant="tertiary"
-              size="sm"
-              className="hidden sm:inline-flex"
-            >
-              Log In
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="hidden sm:inline-flex"
-            >
-              Get Started
-            </Button>
+            <Link to="/login" className="hidden sm:inline-flex">
+              <Button
+                variant="tertiary"
+                size="sm"
+              >
+                Log In
+              </Button>
+            </Link>
+            <Link to="/get-started" className="hidden sm:inline-flex">
+              <Button
+                variant="secondary"
+                size="sm"
+              >
+                Get Started
+              </Button>
+            </Link>
 
             <button 
               onClick={toggleMenu}
@@ -154,35 +154,39 @@ const Navbar = () => {
           >
             Home
           </a>
-          <a
-            href="#about"
-            onClick={(e) => handleNavClick(e, 'about')}
+          <Link
+            to="/about"
+            onClick={() => setIsMenuOpen(false)}
             className="block text-gray-300 hover:text-white transition-colors font-medium py-2 cursor-pointer"
           >
             About us
-          </a>
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, 'contact')}
+          </Link>
+          <Link
+            to="/contact"
+            onClick={() => setIsMenuOpen(false)}
             className="block text-gray-300 hover:text-white transition-colors font-medium py-2 cursor-pointer"
           >
             Contact
-          </a>
+          </Link>
           <div className="flex flex-col space-y-2 pt-2 border-t border-gray-800/30">
-            <Button
-              variant="tertiary"
-              size="sm"
-              className="w-full"
-            >
-              Log In
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="w-full"
-            >
-              Get Started
-            </Button>
+            <Link to="/login" className="w-full">
+              <Button
+                variant="tertiary"
+                size="sm"
+                className="w-full"
+              >
+                Log In
+              </Button>
+            </Link>
+            <Link to="/get-started" className="w-full">
+              <Button
+                variant="secondary"
+                size="sm"
+                className="w-full"
+              >
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

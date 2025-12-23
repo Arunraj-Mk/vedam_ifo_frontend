@@ -9,6 +9,7 @@ interface ArrowButtonProps {
   onClick?: () => void;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({ 
@@ -19,7 +20,8 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({
   arrowColor = "#333333",
   onClick,
   className = "",
-  size = "lg"
+  size = "lg",
+  type = "button"
 }) => {
   
   const sizeClasses: Record<'sm' | 'md' | 'lg', { button: string; arrow: string; icon: number }> = {
@@ -44,6 +46,7 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({
 
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`relative inline-flex items-center justify-center font-normal transition-transform hover:scale-105 active:scale-95 ${currentSize.button} ${className}`}
       style={{

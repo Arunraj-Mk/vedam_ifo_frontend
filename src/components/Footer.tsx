@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import vedhamInfoImage from '@/assets/images/vedham_info.jpeg?url';
 
 const Footer = () => {
@@ -15,21 +16,28 @@ const Footer = () => {
   };
 
   return (
-    <footer id="contact" className="relative bg-[#E0F2F2] text-primary overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-20 overflow-hidden">
-        <svg
-          className="absolute top-0 left-0 w-full h-full"
-          viewBox="0 0 1440 100"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0,100 Q360,0 720,50 T1440,100 L1440,100 L0,100 Z"
-            fill="#0B7077"
-            opacity="0.1"
-          />
-        </svg>
-      </div>
-
+    <footer id="contact" className="relative text-primary">
+    {/* Wavy Top Border */}
+    <svg
+      viewBox="0 0 1440 140"
+      preserveAspectRatio="none"
+      className="block w-full h-[140px]"
+    >
+      <path
+        d="
+          M0,100
+          C120,40 240,160 360,120
+          C480,80 600,20 720,60
+          C840,100 960,160 1080,120
+          C1200,80 1320,40 1440,80
+          L1440,140
+          L0,140
+          Z
+        "
+        fill="#E0F2F2"
+      />
+    </svg>
+ 
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div className="space-y-4">
@@ -102,28 +110,28 @@ const Footer = () => {
             <h4 className="font-bold text-primary mb-4 text-lg">company</h4>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#home"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection('home');
-                  }}
+                <Link
+                  to="/"
                   className="text-primary hover:text-primary-600 transition-colors block"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#about"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection('about');
-                  }}
+                <Link
+                  to="/about"
                   className="text-primary hover:text-primary-600 transition-colors block"
                 >
                   About us
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-primary hover:text-primary-600 transition-colors block"
+                >
+                  Contact
+                </Link>
               </li>
               <li>
                 <a

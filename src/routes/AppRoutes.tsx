@@ -1,12 +1,30 @@
 import { Routes, Route } from 'react-router-dom';
-import TestPage from '@/pages/test/TestPage';
-import HomePage from '@/pages/home/HomePage';
+import PrivateRoute from './PrivateRoute';
+import { publicRoutes } from './publicRoutes';
+import { privateRoutes } from './privateRoutes';
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/test" element={<TestPage />} />
+      {/* Public Routes */}
+      {publicRoutes.map((route) => (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={route.element}
+        />
+      ))}
+
+      {/* Private Routes - With Sidebar & Header */}
+      <Route element={<PrivateRoute />}>
+        {privateRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={route.element}
+          />
+        ))}
+      </Route>
     </Routes>
   );
 };
