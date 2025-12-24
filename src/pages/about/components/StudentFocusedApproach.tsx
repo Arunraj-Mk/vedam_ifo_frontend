@@ -16,7 +16,7 @@ const StudentFocusedApproach: React.FC = () => {
             
             {/* Description */}
             <p className="text-base lg:text-lg text-white leading-relaxed font-poppins">
-              SMMBOT, We Believe That Every Student Has The Potential To Excel If Given The Right Guidance And Practice. Our Platform Is Built Around The Core Needs Of Students—Clarity, Consistency, And Confidence. We Don't Just Provide Tests; We Provide A Pathway To Improvement. By Analyzing Mistakes And Understanding Weak Areas Through Our Detailed Reports, Students Can Turn Their Weaknesses Into Strengths Before The Actual Exam.
+              Vedam Info, We Believe That Every Student Has The Potential To Excel If Given The Right Guidance And Practice. Our Platform Is Built Around The Core Needs Of Students—Clarity, Consistency, And Confidence. We Don't Just Provide Tests; We Provide A Pathway To Improvement. By Analyzing Mistakes And Understanding Weak Areas Through Our Detailed Reports, Students Can Turn Their Weaknesses Into Strengths Before The Actual Exam.
             </p>
 
             {/* Highlighted Quote Card: background #E2FF54 */}
@@ -31,7 +31,7 @@ const StudentFocusedApproach: React.FC = () => {
                   className="text-[37px] font-medium leading-[140%] capitalize text-[#093541] flex-1"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  Practice, Analyse, Improve This is the core approach of SMMBOT
+                  Practice, Analyse, Improve This is the core approach of Vedam Info
                 </p>
               </div>
             </div>

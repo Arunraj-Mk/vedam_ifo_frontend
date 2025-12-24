@@ -1,10 +1,33 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Button from './Button';
 import vedhamInfoImage from '@/assets/images/vedham_info.jpeg?url';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+  
+  // Text color classes based on page
+  const textColor = isHomePage 
+    ? 'text-gray-300 hover:text-white' 
+    : 'text-black hover:text-gray-800';
+  
+  const borderColor = isHomePage 
+    ? 'border-gray-800/30' 
+    : 'border-gray-200';
+  
+  const mobileMenuBg = isHomePage 
+    ? 'bg-gray-900/95 backdrop-blur-sm border-gray-800/30' 
+    : 'bg-white border-gray-200';
+  
+  const mobileTextColor = isHomePage 
+    ? 'text-gray-300 hover:text-white' 
+    : 'text-black hover:text-gray-800';
+  
+  const hamburgerColor = isHomePage 
+    ? 'text-gray-300 hover:text-white' 
+    : 'text-black hover:text-gray-800';
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -26,7 +49,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-transparent border-b border-gray-800/30 absolute top-0 left-0 right-0 z-50 w-full">
+    <nav className={`bg-transparent border-b ${borderColor} absolute top-0 left-0 right-0 z-50 w-full`}>
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20 w-full">
           <div className="flex items-center flex-shrink-0">
@@ -44,19 +67,19 @@ const Navbar = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, 'home')}
-              className="text-gray-300 hover:text-white transition-colors font-medium text-sm lg:text-base cursor-pointer"
+              className={`${textColor} transition-colors font-medium text-sm lg:text-base cursor-pointer`}
             >
               Home
             </a>
             <Link
               to="/about"
-              className="text-gray-300 hover:text-white transition-colors font-medium text-sm lg:text-base cursor-pointer"
+              className={`${textColor} transition-colors font-medium text-sm lg:text-base cursor-pointer`}
             >
               About us
             </Link>
             <Link
               to="/contact"
-              className="text-gray-300 hover:text-white transition-colors font-medium text-sm lg:text-base cursor-pointer"
+              className={`${textColor} transition-colors font-medium text-sm lg:text-base cursor-pointer`}
             >
               Contact
             </Link>
@@ -64,25 +87,37 @@ const Navbar = () => {
 
           <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
             <Link to="/login" className="hidden sm:inline-flex">
-              <Button
-                variant="tertiary"
-                size="sm"
-              >
-                Log In
-              </Button>
+              {isHomePage ? (
+                <Button
+                  variant="tertiary"
+                  size="sm"
+                >
+                  Log In
+                </Button>
+              ) : (
+                <button className="px-4 py-2 text-sm font-semibold rounded-[13px] border border-black bg-transparent text-black hover:bg-black hover:text-white transition-all">
+                  Log In
+                </button>
+              )}
             </Link>
             <Link to="/get-started" className="hidden sm:inline-flex">
-              <Button
-                variant="secondary"
-                size="sm"
-              >
-                Get Started
-              </Button>
+              {isHomePage ? (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                >
+                  Get Started
+                </Button>
+              ) : (
+                <button className="px-4 py-2 text-sm font-semibold rounded-[13px] bg-black text-white hover:opacity-90 transition-all">
+                  Get Started
+                </button>
+              )}
             </Link>
 
             <button 
               onClick={toggleMenu}
-              className="md:hidden text-gray-300 hover:text-white transition-colors p-2"
+              className={`md:hidden ${hamburgerColor} transition-colors p-2`}
               aria-label="Toggle menu"
             >
               {isMenuOpen ? (
@@ -125,11 +160,11 @@ const Navbar = () => {
           isMenuOpen ? 'max-h-96 opacity-100 mt-[-63px]' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="px-4 lg:px-8 pb-4 space-y-3 bg-gray-900/95 backdrop-blur-sm border-t border-gray-800/30">
+        <div className={`px-4 lg:px-8 pb-4 space-y-3 ${mobileMenuBg} border-t ${borderColor}`}>
           <div className="flex items-center justify-end mb-2 pt-2">
             <button 
               onClick={toggleMenu}
-              className="text-gray-300 hover:text-white transition-colors p-2"
+              className={`${mobileTextColor} transition-colors p-2`}
               aria-label="Close menu"
             >
               <svg
@@ -150,42 +185,54 @@ const Navbar = () => {
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, 'home')}
-            className="block text-gray-300 hover:text-white transition-colors font-medium py-2 cursor-pointer"
+            className={`block ${mobileTextColor} transition-colors font-medium py-2 cursor-pointer`}
           >
             Home
           </a>
           <Link
             to="/about"
             onClick={() => setIsMenuOpen(false)}
-            className="block text-gray-300 hover:text-white transition-colors font-medium py-2 cursor-pointer"
+            className={`block ${mobileTextColor} transition-colors font-medium py-2 cursor-pointer`}
           >
             About us
           </Link>
           <Link
             to="/contact"
             onClick={() => setIsMenuOpen(false)}
-            className="block text-gray-300 hover:text-white transition-colors font-medium py-2 cursor-pointer"
+            className={`block ${mobileTextColor} transition-colors font-medium py-2 cursor-pointer`}
           >
             Contact
           </Link>
-          <div className="flex flex-col space-y-2 pt-2 border-t border-gray-800/30">
+          <div className={`flex flex-col space-y-2 pt-2 border-t ${borderColor}`}>
             <Link to="/login" className="w-full">
-              <Button
-                variant="tertiary"
-                size="sm"
-                className="w-full"
-              >
-                Log In
-              </Button>
+              {isHomePage ? (
+                <Button
+                  variant="tertiary"
+                  size="sm"
+                  className="w-full"
+                >
+                  Log In
+                </Button>
+              ) : (
+                <button className="w-full px-4 py-2 text-sm font-semibold rounded-[13px] border border-black bg-transparent text-black hover:bg-black hover:text-white transition-all">
+                  Log In
+                </button>
+              )}
             </Link>
             <Link to="/get-started" className="w-full">
-              <Button
-                variant="secondary"
-                size="sm"
-                className="w-full"
-              >
-                Get Started
-              </Button>
+              {isHomePage ? (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="w-full"
+                >
+                  Get Started
+                </Button>
+              ) : (
+                <button className="w-full px-4 py-2 text-sm font-semibold rounded-[13px] bg-black text-white hover:opacity-90 transition-all">
+                  Get Started
+                </button>
+              )}
             </Link>
           </div>
         </div>

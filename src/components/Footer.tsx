@@ -31,10 +31,10 @@ const Footer = () => {
             <div className="flex items-start gap-3 mb-4">
               <img
                 src={vedhamInfoImage}
-                alt="Smmbot Logo"
+                alt="Vedam Info Logo"
                 className="w-16 h-16 object-contain flex-shrink-0"
               />
-              <h3 className="text-3xl font-bold text-primary leading-tight">Smmbot</h3>
+              <h3 className="text-3xl font-bold text-primary leading-tight">Vedam Info</h3>
             </div>
             <div className="space-y-3">
               <div>

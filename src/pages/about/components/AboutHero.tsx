@@ -14,7 +14,7 @@ const AboutHero: React.FC = () => {
           <div className="w-full lg:max-w-[667px] lg:min-h-[432px] flex flex-col gap-4">
             {/* Badge */}
             <div className="w-fit">
-              <WelcomeBadge text="About SMMBOT" />
+              <WelcomeBadge text="About Vedam Info" />
             </div>
 
             {/* White Background Container for Heading + Subheading + Description + CTA */}
@@ -34,7 +34,7 @@ const AboutHero: React.FC = () => {
 
                 {/* Description with #6A7282 background */}
                 <p className="text-[16px] font-medium leading-[168%] text-[#6A7282] font-poppins capitalize bg-white rounded-[12px] py-3">
-                  SMMBOT is a dedicated online test series platform that helps students from Class 8 to 12 practice,
+                  Vedam Info is a dedicated online test series platform that helps students from Class 8 to 12 practice,
                   improve their performance, and experience real exam-like tests. We provide comprehensive practice
                   tests designed to boost confidence and academic excellence.
                 </p>
@@ -75,7 +75,7 @@ const AboutHero: React.FC = () => {
             <div className="w-full max-w-[502px] h-[548px] rounded-[20px] overflow-hidden bg-[#153F4B] flex items-center justify-center">
               <img
                 src={aboutGirlStudent}
-                alt="Student studying with SMMBOT"
+                alt="Student studying with Vedam Info"
                 className="w-full h-full object-contain"
               />
             </div>

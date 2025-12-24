@@ -52,7 +52,7 @@ const WhyChooseUs: React.FC = () => {
             <div className="w-full max-w-[502px] h-[548px] rounded-[20px] overflow-hidden bg-[#153F4B] flex items-center justify-center">
               <img
                 src={aboutBoyStudent}
-                alt="Student with SMMBOT"
+                alt="Student with Vedam Info"
                 className="w-full h-full object-contain"
               />
             </div>

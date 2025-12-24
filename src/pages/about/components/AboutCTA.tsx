@@ -15,7 +15,7 @@ const AboutCTA: React.FC = () => {
                 Ready To Start Your Practice?
               </h2>
               <p className="text-base md:text-lg mb-8 text-white/90 max-w-lg mx-auto lg:mx-0 leading-relaxed font-poppins">
-                Join thousands of students improving their scores today with SMMBOT.
+                Join thousands of students improving their scores today with Vedam Info.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/get-started">
@@ -41,7 +41,7 @@ const AboutCTA: React.FC = () => {
               <div className="w-full max-w-[502px] h-[548px] rounded-[20px] overflow-hidden bg-[#153F4B] flex items-center justify-center">
                 <img
                   src={aboutGirlStudent}
-                  alt="Student with SMMBOT"
+                  alt="Student with Vedam Info"
                   className="w-full h-full object-contain"
                 />
               </div>
