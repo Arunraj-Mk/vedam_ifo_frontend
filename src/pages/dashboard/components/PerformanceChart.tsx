@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BarChart from '@/components/BarChart';
 import { BarChartData } from '@/components/BarChart';
 
 interface PerformanceChartProps {
   data: BarChartData[];
   title?: string;
+  selectedTimeRange?: string;
   onTimeRangeChange?: (range: string) => void;
 }
 
 const PerformanceChart: React.FC<PerformanceChartProps> = ({
   data,
   title = 'Performance by Subject',
+  selectedTimeRange = 'Last 30 days',
   onTimeRangeChange,
 }) => {
-  const [selectedRange, setSelectedRange] = useState('Last 7 days');
+  const [selectedRange, setSelectedRange] = useState(selectedTimeRange);
+
+  // Sync internal state with prop changes
+  useEffect(() => {
+    if (selectedTimeRange) {
+      setSelectedRange(selectedTimeRange);
+    }
+  }, [selectedTimeRange]);
 
   const timeRanges = ['Last 7 days', 'Last 30 days', 'Last 3 months', 'All time'];
 

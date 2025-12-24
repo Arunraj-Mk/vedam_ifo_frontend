@@ -17,6 +17,7 @@ interface PersonalInformationModalProps {
   onClose: () => void;
   initialData?: Partial<PersonalInformationFormData>;
   onSave?: (data: PersonalInformationFormData) => void;
+  isSaving?: boolean;
 }
 
 const PersonalInformationModal: React.FC<PersonalInformationModalProps> = ({
@@ -30,6 +31,7 @@ const PersonalInformationModal: React.FC<PersonalInformationModalProps> = ({
     schoolId: 'SCH001',
   },
   onSave,
+  isSaving = false,
 }) => {
   const {
     control,
@@ -48,7 +50,7 @@ const PersonalInformationModal: React.FC<PersonalInformationModalProps> = ({
 
   const onSubmit = (data: PersonalInformationFormData) => {
     onSave?.(data);
-    onClose();
+    // Don't close modal here - let parent handle it after successful save
   };
 
   const classGradeOptions = [
@@ -146,51 +148,31 @@ const PersonalInformationModal: React.FC<PersonalInformationModalProps> = ({
           )}
         />
 
-        <Controller
-          name="schoolName"
-          control={control}
-          rules={{
-            required: 'School name is required',
-            minLength: {
-              value: 2,
-              message: 'School name must be at least 2 characters',
-            },
-          }}
-          render={({ field }) => (
-            <LoginInput
-              label="School Name*"
-              type="text"
-              placeholder="Enter your school name"
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              error={errors.schoolName?.message}
-            />
-          )}
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            School Name
+          </label>
+          <input
+            type="text"
+            value={initialData.schoolName || ''}
+            disabled
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
+          />
+          <p className="mt-1 text-xs text-gray-500">School name cannot be changed</p>
+        </div>
 
-        <Controller
-          name="schoolId"
-          control={control}
-          rules={{
-            required: 'School ID is required',
-            minLength: {
-              value: 2,
-              message: 'School ID must be at least 2 characters',
-            },
-          }}
-          render={({ field }) => (
-            <LoginInput
-              label="School ID*"
-              type="text"
-              placeholder="Enter your school ID"
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              error={errors.schoolId?.message}
-            />
-          )}
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            School ID
+          </label>
+          <input
+            type="text"
+            value={initialData.schoolId || ''}
+            disabled
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
+          />
+          <p className="mt-1 text-xs text-gray-500">School ID cannot be changed</p>
+        </div>
 
         <div className="pt-4">
             <div className=''>
@@ -201,9 +183,10 @@ const PersonalInformationModal: React.FC<PersonalInformationModalProps> = ({
             variant="primary"
             size="md"
             fullWidth
-            className='bg-[#02947B]'
+            disabled={isSaving}
+            className='bg-[#02947B] disabled:opacity-50'
           >
-            Save Details
+            {isSaving ? 'Saving...' : 'Save Details'}
           </Button>
         </div>
       </form>

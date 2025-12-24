@@ -10,6 +10,7 @@ export interface SubjectCardProps {
   numberOfQuestions: number;
   testTiming: string; // e.g., "90 Mins"
   onStartTest?: (subjectId: string) => void;
+  isStarting?: boolean;
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({
@@ -21,9 +22,11 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
   numberOfQuestions,
   testTiming,
   onStartTest,
+  isStarting = false,
 }) => {
+
   const handleStartTest = () => {
-    if (onStartTest) {
+    if (onStartTest && !isStarting) {
       onStartTest(id);
     }
   };
@@ -80,9 +83,10 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
           variant="primary"
           size="md"
           onClick={handleStartTest}
-          className="bg-[#02947B] hover:bg-[#027a6a] text-white rounded-lg"
+          disabled={isStarting}
+          className="bg-[#02947B] hover:bg-[#027a6a] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Start Test →
+          {isStarting ? 'Starting...' : 'Start Test →'}
         </Button>
       </div>
     </div>

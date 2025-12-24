@@ -56,6 +56,7 @@ const QuickNavigation: React.FC<QuickNavigationProps> = ({
                 ${getBorderStyle(question.status, isCurrent)}
                 hover:scale-105 focus:outline-none focus:ring-1 focus:ring-[#4B9C91] focus:ring-offset-1
                 flex items-center justify-center
+                max-w-[50px] max-h-[50px]
               `}
               style={{ fontFamily: 'General Sans, sans-serif' }}
             >

@@ -13,6 +13,7 @@ const MUTATION_KEYS = {
   // Students
   CREATE_STUDENT: 'create_student',
   UPDATE_STUDENT: 'update_student',
+  UPDATE_STUDENT_PROFILE: 'update_student_profile',
   DELETE_STUDENT: 'delete_student',
   BULK_UPLOAD_STUDENTS: 'bulk_upload_students',
   
@@ -57,6 +58,7 @@ export const mutationKeys = {
   students: {
     create: [MUTATION_KEYS.CREATE_STUDENT] as const,
     update: (id: string) => [MUTATION_KEYS.UPDATE_STUDENT, id] as const,
+    updateProfile: (id: string) => [MUTATION_KEYS.UPDATE_STUDENT_PROFILE, id] as const,
     delete: (id: string) => [MUTATION_KEYS.DELETE_STUDENT, id] as const,
     bulkUpload: [MUTATION_KEYS.BULK_UPLOAD_STUDENTS] as const,
   },

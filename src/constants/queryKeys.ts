@@ -64,6 +64,13 @@ export const queryKeys = {
     details: () => [...queryKeys.students.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.students.details(), id] as const,
     bulkUpload: () => [...queryKeys.students.all, QUERY_KEYS.STUDENTS_BULK_UPLOAD] as const,
+    profile: () => [...queryKeys.students.all, 'profile'] as const,
+    profileDetail: (id: string) => [...queryKeys.students.profile(), id] as const,
+    dashboard: () => [...queryKeys.students.all, 'dashboard'] as const,
+    dashboardData: (timeRange?: string, limit?: number) => 
+      [...queryKeys.students.dashboard(), timeRange, limit] as const,
+    performanceBySubject: (timeRange?: string, subjects?: string[]) => 
+      [...queryKeys.students.dashboard(), 'performance-by-subject', timeRange, subjects] as const,
   },
   
   // Schools

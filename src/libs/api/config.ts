@@ -12,6 +12,9 @@ export const API_ENDPOINTS = {
   
   // Students
   STUDENTS: '/students',
+  STUDENTS_ME_PROFILE: '/students/me/profile',
+  STUDENTS_ME_DASHBOARD: '/students/me/dashboard',
+  STUDENTS_ME_DASHBOARD_PERFORMANCE: '/students/me/dashboard/performance-by-subject',
   STUDENTS_BULK_UPLOAD: '/students/bulk-upload',
   STUDENTS_BULK_UPLOAD_TEMPLATE: '/students/bulk-upload/template',
   

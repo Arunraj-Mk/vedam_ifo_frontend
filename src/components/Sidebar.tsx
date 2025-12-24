@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     {
       icon: capIcon,
       label: 'Dashboard',
-      path: '/dashboard',
+      path: '/',
     },
     {
       icon: homeIcon,

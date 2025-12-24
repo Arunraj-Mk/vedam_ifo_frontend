@@ -1,105 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import TestResultCard, { TestResultData } from './TestResultCard';
+import { useMyTestAttempts } from '@/hooks/useStudents';
 
 interface RecentTestsHistoryProps {
   tests?: TestResultData[];
 }
 
-const RecentTestsHistory: React.FC<RecentTestsHistoryProps> = ({ tests }) => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState<string>('Last 7 days');
+const RecentTestsHistory: React.FC<RecentTestsHistoryProps> = ({ tests: propTests }) => {
+  const [selectedTimeRange, setSelectedTimeRange] = useState<string>('All');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const defaultTests: TestResultData[] = [
-    {
-      id: '1',
-      testNumber: 1,
-      subject: 'Mathematics',
-      status: 'Pass',
-      score: 85,
-      date: '10 Dec 2025',
-      duration: '90 minutes',
-      totalQuestions: 60,
-      answered: 58,
-      skipped: 2,
-    },
-    {
-      id: '2',
-      testNumber: 2,
-      subject: 'Science',
-      status: 'Pass',
-      score: 75,
-      date: '10 Dec 2025',
-      duration: '90 minutes',
-      totalQuestions: 60,
-      answered: 58,
-      skipped: 2,
-    },
-    {
-      id: '3',
-      testNumber: 3,
-      subject: 'English',
-      status: 'Pass',
-      score: 81,
-      date: '10 Dec 2025',
-      duration: '90 minutes',
-      totalQuestions: 60,
-      answered: 58,
-      skipped: 2,
-    },
-    {
-      id: '4',
-      testNumber: 1,
-      subject: 'Mathematics',
-      status: 'Pass',
-      score: 85,
-      date: '10 Dec 2025',
-      duration: '90 minutes',
-      totalQuestions: 60,
-      answered: 58,
-      skipped: 2,
-    },
-    {
-      id: '5',
-      testNumber: 2,
-      subject: 'Science',
-      status: 'Pass',
-      score: 75,
-      date: '10 Dec 2025',
-      duration: '90 minutes',
-      totalQuestions: 60,
-      answered: 58,
-      skipped: 2,
-    },
-    {
-      id: '6',
-      testNumber: 3,
-      subject: 'English',
-      status: 'Pass',
-      score: 81,
-      date: '10 Dec 2025',
-      duration: '90 minutes',
-      totalQuestions: 60,
-      answered: 58,
-      skipped: 2,
-    },
-  ];
+  // Get test attempts from API
+  const { data: attemptsData, isLoading } = useMyTestAttempts({
+    status: 'COMPLETED',
+    limit: 6,
+    sortBy: 'date',
+    order: 'desc',
+  });
 
-  const testsData = tests || defaultTests;
+  // Convert API attempts to TestResultData format
+  const testsData = useMemo(() => {
+    if (propTests) return propTests;
 
-  const timeRangeOptions = ['Last 7 days', '1 month', '24 hours'];
+    if (!attemptsData?.data.attempts) return [];
+
+    return attemptsData.data.attempts.map((attempt, index): TestResultData => ({
+      id: attempt.attemptId,
+      testNumber: index + 1,
+      subject: attempt.testName,
+      status: (attempt.percentage && attempt.percentage >= 50 ? 'Pass' : 'Fail') as 'Pass' | 'Fail' | 'Pending',
+      score: attempt.percentage || 0,
+      date: new Date(attempt.submittedAt || attempt.startedAt).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }),
+      duration: `${Math.floor((attempt.totalQuestions * 1.5) / 60)} minutes`,
+      totalQuestions: attempt.totalQuestions,
+      answered: attempt.answeredCount || 0,
+      skipped: attempt.totalQuestions - (attempt.answeredCount || 0),
+      attemptId: attempt.attemptId,
+    }));
+  }, [attemptsData, propTests]);
+
+  const timeRangeOptions = ['All', 'Last 7 days', '1 month', '24 hours'];
 
   const handleTimeRangeChange = (range: string) => {
     setSelectedTimeRange(range);
     setIsDropdownOpen(false);
-    // TODO: Filter tests based on time range
+    // TODO: Implement date filtering based on range
   };
+
+
+  if (isLoading) {
+    return (
+      <div>
+        <h2
+          className="text-[20px] font-semibold leading-[100%] text-[#010715] mb-6"
+          style={{ fontFamily: 'General Sans, sans-serif' }}
+        >
+          Recent Tests History
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white rounded-lg p-4 border animate-pulse">
+              <div className="h-4 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
       {/* Section Header */}
       <div className="flex items-center justify-between mb-6 w-full">
-        <h2 
-          className="text-[20px] font-semibold leading-[100%] text-[#010715]" 
+        <h2
+          className="text-[20px] font-semibold leading-[100%] text-[#010715]"
           style={{ fontFamily: 'General Sans, sans-serif' }}
         >
           Recent Tests History
@@ -152,11 +131,17 @@ const RecentTestsHistory: React.FC<RecentTestsHistoryProps> = ({ tests }) => {
       </div>
 
       {/* Test Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {testsData.map((test) => (
-          <TestResultCard key={test.id} test={test} />
-        ))}
-      </div>
+      {testsData.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500">No test attempts yet. Start your first test!</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {testsData.map((test) => (
+            <TestResultCard key={test.id} test={test} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

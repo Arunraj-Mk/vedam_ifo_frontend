@@ -1,6 +1,7 @@
 import { Modal } from '@/components';
 import React, { useState } from 'react';
 import TestResultModalContent from './TestModal';
+import { useTestResults } from '@/hooks/useTests';
 
 export interface TestResultData {
   id: string;
@@ -14,6 +15,7 @@ export interface TestResultData {
   answered: number;
   skipped: number;
   subjectIcon?: React.ReactNode;
+  attemptId?: string;
 }
 
 interface TestResultCardProps {
@@ -22,6 +24,12 @@ interface TestResultCardProps {
 
 const TestResultCard: React.FC<TestResultCardProps> = ({ test }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Fetch test results when modal opens
+  const { data: testResults, isLoading: isLoadingResults } = useTestResults(
+    test.attemptId || '',
+    isModalOpen && !!test.attemptId
+  );
 
   const getSubjectIcon = () => {
     const subjectLower = test.subject.toLowerCase();
@@ -41,7 +49,7 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test }) => {
   };
 
   const handleCardClick = () => {
-    // Open modal instead of navigating
+    // Always open modal instead of navigating
     setIsModalOpen(true);
   };
 
@@ -128,33 +136,34 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test }) => {
     <Modal
       isOpen={isModalOpen}
       onClose={handleCloseModal}
-      size="lg"
+      size="xl"
+      title={`Test Results - ${test.subject}`}
     >
-      <TestResultModalContent
-        testTitle={`Test #${test.testNumber} - ${test.subject}`}
-        date={test.date}
-        duration={test.duration}
-        sections={[
-          {
-            name: "Algebra",
-            score: `${test.score}%`,
-            question: {
-              title: "Solve for X: 3x + 7 = 22",
-              options: [
-                { label: "X = 5", value: "5", isSelected: true },
-                { label: "X = 6", value: "6" },
-                { label: "X = 4", value: "4", isCorrect: true },
-              ],
-            },
-          },
-          { name: "Geometry", score: `${test.score - 5}%` },
-        ]}
-        insights={[
-          { text: `Strong performance in ${test.subject} (${test.score}%)` },
-          { text: `Answered ${test.answered} out of ${test.totalQuestions} questions` },
-          { text: test.status === 'Pass' ? "Great job! Keep up the good work." : "Review the concepts and try again." },
-        ]}
-      />
+      {isLoadingResults ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4B9C91] mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading test results...</p>
+          </div>
+        </div>
+      ) : testResults?.data ? (
+        <TestResultModalContent
+          testTitle={`Test #${test.testNumber} - ${test.subject}`}
+          date={test.date}
+          duration={test.duration}
+          testResults={testResults.data}
+        />
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-gray-600 mb-4">Unable to load test results</p>
+          <button
+            onClick={handleCloseModal}
+            className="text-[#4B9C91] hover:text-[#3a7a70] font-medium"
+          >
+            Close
+          </button>
+        </div>
+      )}
     </Modal>
     </>
   );

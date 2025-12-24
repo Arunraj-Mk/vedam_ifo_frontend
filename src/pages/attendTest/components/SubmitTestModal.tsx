@@ -6,12 +6,17 @@ interface SubmitTestModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: () => void;
+  isSubmitting?: boolean;
 }
 
-const SubmitTestModal: React.FC<SubmitTestModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const SubmitTestModal: React.FC<SubmitTestModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  isSubmitting = false,
+}) => {
   const handleSubmit = () => {
     onSubmit();
-    onClose();
   };
 
   return (
@@ -81,9 +86,10 @@ const SubmitTestModal: React.FC<SubmitTestModalProps> = ({ isOpen, onClose, onSu
             variant="primary"
             size="md"
             onClick={handleSubmit}
-            className="w-full sm:w-auto bg-[#4B9C91] hover:bg-[#3a7a70] text-white"
+            disabled={isSubmitting}
+            className="w-full sm:w-auto bg-[#4B9C91] hover:bg-[#3a7a70] text-white disabled:opacity-50"
           >
-            Submit Test →
+            {isSubmitting ? 'Submitting...' : 'Submit Test →'}
           </Button>
           </div>
         </div>

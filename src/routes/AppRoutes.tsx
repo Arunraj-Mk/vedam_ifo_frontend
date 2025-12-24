@@ -12,6 +12,7 @@ import TestPage from '@/pages/test/TestPage';
 import ProfilePage from '@/pages/profile/Profile';
 import AnalyticsPage from '@/pages/analytics';
 import AttendTestPage from '@/pages/attendTest';
+import TestResultsPage from '@/pages/testResults/TestResultsPage';
 
 const AppRoutes = () => {
   return (
@@ -36,7 +37,8 @@ const AppRoutes = () => {
         <Route path="/test" element={<TestPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
-        <Route path="/attend-test" element={<AttendTestPage />} />
+        <Route path="/attend-test/:attemptId" element={<AttendTestPage />} />
+        <Route path="/test/:attemptId/results" element={<TestResultsPage />} />
       </Route>
 
       {/* Catch all - redirect to home */}

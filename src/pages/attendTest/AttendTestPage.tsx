@@ -1,137 +1,199 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import TestHeader from './components/TestHeader';
 import TestTimer from './components/TestTimer';
 import QuestionCard from './components/QuestionCard';
 import QuickNavigation from './components/QuickNavigation';
 import SubmitTestModal from './components/SubmitTestModal';
-
-interface QuestionOption {
-  id: string;
-  label: string;
-}
-
-interface Question {
-  id: number;
-  text: string;
-  category: string;
-  options: QuestionOption[];
-}
-
-// Sample questions data
-const questionsData: Question[] = [
-  // Algebra Questions
-  { id: 1, category: 'Algebra', text: 'Solve For X: 3x + 7 = 22', options: [{ id: '1', label: 'X=5' }, { id: '2', label: 'X=6' }, { id: '3', label: 'X=4' }, { id: '4', label: 'X=7' }] },
-  { id: 2, category: 'Algebra', text: 'Simplify: (2x + 3)(x - 4)', options: [{ id: '1', label: '2x² - 5x - 12' }, { id: '2', label: '2x² + 5x - 12' }, { id: '3', label: '2x² - 11x - 12' }, { id: '4', label: '2x² + 11x - 12' }] },
-  { id: 3, category: 'Algebra', text: 'What is the value of x if 2x² - 8 = 0?', options: [{ id: '1', label: 'x = ±2' }, { id: '2', label: 'x = ±4' }, { id: '3', label: 'x = ±8' }, { id: '4', label: 'x = ±16' }] },
-  { id: 4, category: 'Algebra', text: 'Solve the system: x + y = 10, x - y = 4', options: [{ id: '1', label: 'x=7, y=3' }, { id: '2', label: 'x=6, y=4' }, { id: '3', label: 'x=8, y=2' }, { id: '4', label: 'x=5, y=5' }] },
-  { id: 5, category: 'Algebra', text: 'Factor: x² - 9', options: [{ id: '1', label: '(x-3)(x+3)' }, { id: '2', label: '(x-9)(x+1)' }, { id: '3', label: '(x-3)²' }, { id: '4', label: '(x+3)²' }] },
-  { id: 6, category: 'Algebra', text: 'What is the slope of the line y = 3x + 5?', options: [{ id: '1', label: '3' }, { id: '2', label: '5' }, { id: '3', label: '-3' }, { id: '4', label: '-5' }] },
-  { id: 7, category: 'Algebra', text: 'Solve: |x - 5| = 3', options: [{ id: '1', label: 'x = 2 or x = 8' }, { id: '2', label: 'x = -2 or x = 8' }, { id: '3', label: 'x = 2 or x = -8' }, { id: '4', label: 'x = -2 or x = -8' }] },
-  { id: 8, category: 'Algebra', text: 'What is the domain of f(x) = √(x - 3)?', options: [{ id: '1', label: 'x ≥ 3' }, { id: '2', label: 'x > 3' }, { id: '3', label: 'x ≤ 3' }, { id: '4', label: 'All real numbers' }] },
-  { id: 9, category: 'Algebra', text: 'Simplify: (x³)²', options: [{ id: '1', label: 'x⁵' }, { id: '2', label: 'x⁶' }, { id: '3', label: 'x⁹' }, { id: '4', label: '2x³' }] },
-  { id: 10, category: 'Algebra', text: 'Solve: log₂(x) = 4', options: [{ id: '1', label: 'x = 8' }, { id: '2', label: 'x = 16' }, { id: '3', label: 'x = 32' }, { id: '4', label: 'x = 64' }] },
-  
-  // Geometry Questions
-  { id: 11, category: 'Geometry', text: 'What is the area of a circle with radius 5?', options: [{ id: '1', label: '10π' }, { id: '2', label: '25π' }, { id: '3', label: '50π' }, { id: '4', label: '100π' }] },
-  { id: 12, category: 'Geometry', text: 'In a right triangle, if one leg is 3 and the other is 4, what is the hypotenuse?', options: [{ id: '1', label: '5' }, { id: '2', label: '6' }, { id: '3', label: '7' }, { id: '4', label: '8' }] },
-  { id: 13, category: 'Geometry', text: 'What is the sum of interior angles of a hexagon?', options: [{ id: '1', label: '540°' }, { id: '2', label: '720°' }, { id: '3', label: '900°' }, { id: '4', label: '1080°' }] },
-  { id: 14, category: 'Geometry', text: 'A triangle has sides 5, 12, and 13. What type of triangle is it?', options: [{ id: '1', label: 'Equilateral' }, { id: '2', label: 'Isosceles' }, { id: '3', label: 'Right' }, { id: '4', label: 'Scalene' }] },
-  { id: 15, category: 'Geometry', text: 'What is the volume of a cylinder with radius 3 and height 5?', options: [{ id: '1', label: '15π' }, { id: '2', label: '30π' }, { id: '3', label: '45π' }, { id: '4', label: '90π' }] },
-  { id: 16, category: 'Geometry', text: 'Two parallel lines are cut by a transversal. If one angle is 60°, what is the corresponding angle?', options: [{ id: '1', label: '30°' }, { id: '2', label: '60°' }, { id: '3', label: '120°' }, { id: '4', label: '180°' }] },
-  { id: 17, category: 'Geometry', text: 'What is the perimeter of a square with area 64?', options: [{ id: '1', label: '16' }, { id: '2', label: '32' }, { id: '3', label: '64' }, { id: '4', label: '128' }] },
-  { id: 18, category: 'Geometry', text: 'In a circle, if the central angle is 90°, what fraction of the circle does it represent?', options: [{ id: '1', label: '1/2' }, { id: '2', label: '1/3' }, { id: '3', label: '1/4' }, { id: '4', label: '1/6' }] },
-  { id: 19, category: 'Geometry', text: 'What is the surface area of a cube with side length 4?', options: [{ id: '1', label: '48' }, { id: '2', label: '64' }, { id: '3', label: '96' }, { id: '4', label: '128' }] },
-  { id: 20, category: 'Geometry', text: 'If two triangles are similar with ratio 2:3, and the smaller triangle has area 16, what is the larger area?', options: [{ id: '1', label: '24' }, { id: '2', label: '32' }, { id: '3', label: '36' }, { id: '4', label: '48' }] },
-  
-  // Calculus Questions
-  { id: 21, category: 'Calculus', text: 'What is the derivative of f(x) = x³?', options: [{ id: '1', label: '3x²' }, { id: '2', label: 'x²' }, { id: '3', label: '3x' }, { id: '4', label: 'x³' }] },
-  { id: 22, category: 'Calculus', text: 'What is the derivative of sin(x)?', options: [{ id: '1', label: 'cos(x)' }, { id: '2', label: '-cos(x)' }, { id: '3', label: 'sin(x)' }, { id: '4', label: '-sin(x)' }] },
-  { id: 23, category: 'Calculus', text: 'What is ∫ x dx?', options: [{ id: '1', label: 'x²/2 + C' }, { id: '2', label: 'x² + C' }, { id: '3', label: 'x + C' }, { id: '4', label: '1 + C' }] },
-  { id: 24, category: 'Calculus', text: 'What is the limit of (x² - 4)/(x - 2) as x approaches 2?', options: [{ id: '1', label: '0' }, { id: '2', label: '2' }, { id: '3', label: '4' }, { id: '4', label: 'Undefined' }] },
-  { id: 25, category: 'Calculus', text: 'What is the derivative of eˣ?', options: [{ id: '1', label: 'eˣ' }, { id: '2', label: 'xeˣ' }, { id: '3', label: 'eˣ/x' }, { id: '4', label: 'ln(x)' }] },
-  { id: 26, category: 'Calculus', text: 'What is ∫ 1/x dx?', options: [{ id: '1', label: 'ln|x| + C' }, { id: '2', label: '1/x² + C' }, { id: '3', label: 'x + C' }, { id: '4', label: 'x²/2 + C' }] },
-  { id: 27, category: 'Calculus', text: 'What is the derivative of ln(x)?', options: [{ id: '1', label: '1/x' }, { id: '2', label: 'x' }, { id: '3', label: '1/x²' }, { id: '4', label: 'ln(x)' }] },
-  { id: 28, category: 'Calculus', text: 'What is the second derivative of x⁴?', options: [{ id: '1', label: '4x³' }, { id: '2', label: '12x²' }, { id: '3', label: '24x' }, { id: '4', label: '24' }] },
-  { id: 29, category: 'Calculus', text: 'What is the derivative of f(x) = 5x² + 3x - 2?', options: [{ id: '1', label: '10x + 3' }, { id: '2', label: '5x + 3' }, { id: '3', label: '10x - 2' }, { id: '4', label: '5x² + 3' }] },
-  { id: 30, category: 'Calculus', text: 'What is ∫ cos(x) dx?', options: [{ id: '1', label: 'sin(x) + C' }, { id: '2', label: '-sin(x) + C' }, { id: '3', label: 'cos(x) + C' }, { id: '4', label: '-cos(x) + C' }] },
-];
-
-// Extend to 60 questions by repeating with variations
-const allQuestions: Question[] = [
-  ...questionsData,
-  ...questionsData.map((q) => ({ ...q, id: q.id + 30, text: `${q.text} (Part 2)` })),
-];
+import {
+  useTestQuestions,
+  useAttemptStatus,
+  useSubmitAnswer,
+  useSubmitTest,
+} from '@/hooks/useTests';
+import type { Question } from '@/services/tests.service';
 
 const AttendTestPage: React.FC = () => {
   const navigate = useNavigate();
+  const { attemptId } = useParams<{ attemptId: string }>();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
-  const [timeRemaining, setTimeRemaining] = useState(73 * 60 + 52); // 73:52 in seconds
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
-  const totalTime = 90 * 60; // 90:00 in seconds
+  // Local state to track selected answers for immediate UI updates
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
 
-  const testData = {
-    title: 'Mathematics Mastery Quiz',
-    subtitle: 'Test your knowledge of Algebra, Geometry, and Calculus',
-    totalQuestions: allQuestions.length,
-  };
+  // Get test questions
+  const { data: questionsData, isLoading: questionsLoading } = useTestQuestions(
+    attemptId || '',
+    !!attemptId
+  );
 
-  const currentQuestion = allQuestions[currentQuestionIndex];
+  // Get attempt status for timer
+  const { data: statusData } = useAttemptStatus(attemptId || '', !!attemptId);
+
+  // Submit answer mutation
+  const { mutate: submitAnswer } = useSubmitAnswer(attemptId || undefined);
+
+  // Submit test mutation
+  const { mutate: submitTest, isPending: isSubmitting } = useSubmitTest(
+    attemptId || undefined
+  );
+
+  const questions = questionsData?.data.questions || [];
+  const timeRemaining = statusData?.data.timeRemaining || questionsData?.data.timeRemaining || 0;
+  // Get total duration from questions data or status data
+  const totalTime = questionsData?.data.timeRemaining || statusData?.data.timeRemaining || 5400;
+
+  // Initialize selected answers from API data when questions load
+  useEffect(() => {
+    if (questions.length > 0) {
+      const initialAnswers: Record<string, string> = {};
+      questions.forEach((q) => {
+        if (q.selectedAnswer) {
+          initialAnswers[q.id] = q.selectedAnswer;
+        }
+      });
+      setSelectedAnswers(initialAnswers);
+    }
+  }, [questions]);
+
+  // Convert API question format to component format
+  const convertQuestion = useCallback(
+    (q: Question, index: number) => {
+      // Use local state if available, otherwise fall back to API data
+      const selectedAnswer = selectedAnswers[q.id] || q.selectedAnswer;
+      return {
+        id: index + 1,
+        text: q.questionText,
+        category: q.subject,
+        options: [
+          { id: 'A', label: q.optionA, isSelected: selectedAnswer === 'A' },
+          { id: 'B', label: q.optionB, isSelected: selectedAnswer === 'B' },
+          { id: 'C', label: q.optionC, isSelected: selectedAnswer === 'C' },
+          { id: 'D', label: q.optionD, isSelected: selectedAnswer === 'D' },
+        ],
+      };
+    },
+    [selectedAnswers]
+  );
 
   // Auto-submit handler
-  const handleAutoSubmit = React.useCallback(() => {
-    // Auto-submit when time runs out
-    console.log('Test auto-submitted with answers:', selectedAnswers);
-    navigate('/analytics');
-  }, [selectedAnswers, navigate]);
+  const handleAutoSubmit = useCallback(() => {
+    if (!attemptId) return;
+    submitTest(attemptId, {
+      onSuccess: () => {
+        navigate(`/test/${attemptId}/results`);
+      },
+    });
+  }, [attemptId, submitTest, navigate]);
 
-  // Update timer and auto-submit when time runs out
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          // Auto-submit when time runs out
-          setTimeout(() => handleAutoSubmit(), 100);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  // Auto-submit when time runs out
+  useEffect(() => {
+    if (timeRemaining <= 0 && statusData?.data.status === 'IN_PROGRESS') {
+      handleAutoSubmit();
+    }
+  }, [timeRemaining, statusData?.data.status, handleAutoSubmit]);
 
-    return () => clearInterval(timer);
-  }, [handleAutoSubmit]);
+  // Redirect if no attemptId
+  useEffect(() => {
+    if (!attemptId) {
+      navigate('/test');
+    }
+  }, [attemptId, navigate]);
+
+  // Calculate test data - safe defaults for when data is loading
+  const testData = useMemo(() => {
+    return {
+      title: questionsData?.data.testName || 'Test',
+      subtitle: 'Answer all questions carefully',
+      totalQuestions: questions.length,
+    };
+  }, [questionsData?.data.testName, questions.length]);
 
   // Calculate progress based on answered questions
-  const answeredCount = Object.keys(selectedAnswers).length;
-  const progress = (answeredCount / testData.totalQuestions) * 100;
+  // Use local state count if available, otherwise use API data
+  const progress = useMemo(() => {
+    const localAnsweredCount = Object.keys(selectedAnswers).length;
+    const apiAnsweredCount = statusData?.data.answeredCount || 0;
+    const answeredCount = Math.max(localAnsweredCount, apiAnsweredCount);
+    return testData.totalQuestions > 0 ? (answeredCount / testData.totalQuestions) * 100 : 0;
+  }, [selectedAnswers, statusData?.data.answeredCount, testData.totalQuestions]);
 
   // Generate question status for quick navigation
   const questionStatuses = useMemo(() => {
-    return allQuestions.map((q, index) => {
-      const isAnswered = selectedAnswers[q.id] !== undefined;
+    if (questions.length === 0) return [];
+    return questions.map((q, index) => {
+      // Check both local state and API data for answered status
+      const isAnswered = selectedAnswers[q.id] !== undefined || q.selectedAnswer !== null;
       const isCurrent = index === currentQuestionIndex;
       
       if (isCurrent) return 'current';
       if (isAnswered) return 'attended';
       return 'not-attended';
     });
-  }, [selectedAnswers, currentQuestionIndex]);
+  }, [questions, currentQuestionIndex, selectedAnswers]);
+
+  // Early returns after all hooks
+  if (questionsLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4B9C91] mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading test...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!questionsData || questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Test not found or already completed</p>
+          <button
+            onClick={() => navigate('/test')}
+            className="text-[#4B9C91] hover:text-[#3a7a70]"
+          >
+            Go back to tests
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Question not found</p>
+          <button
+            onClick={() => navigate('/test')}
+            className="text-[#4B9C91] hover:text-[#3a7a70]"
+          >
+            Go back to tests
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleManualSubmit = () => {
     setIsSubmitModalOpen(true);
   };
 
   const handleConfirmSubmit = () => {
-    // Navigate to results page or show results
-    console.log('Test submitted with answers:', selectedAnswers);
-    navigate('/analytics');
+    if (!attemptId) return;
+    setIsSubmitModalOpen(false);
+    submitTest(attemptId, {
+      onSuccess: () => {
+        navigate(`/test/${attemptId}/results`);
+      },
+    });
   };
 
   const handleQuestionSelect = (questionId: number) => {
-    const index = allQuestions.findIndex((q) => q.id === questionId);
-    if (index !== -1) {
+    const index = questionId - 1;
+    if (index >= 0 && index < questions.length) {
       setCurrentQuestionIndex(index);
     }
   };
@@ -143,29 +205,38 @@ const AttendTestPage: React.FC = () => {
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < allQuestions.length - 1) {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
   const handleOptionSelect = (optionId: string) => {
+    if (!attemptId || !currentQuestion) return;
+
+    // Convert optionId (A, B, C, D) to the format expected by API
+    const answer = optionId as 'A' | 'B' | 'C' | 'D';
+
+    // Update local state immediately for instant UI feedback
     setSelectedAnswers((prev) => ({
       ...prev,
-      [currentQuestion.id]: optionId,
+      [currentQuestion.id]: answer,
     }));
+
+    // Submit answer to API
+    submitAnswer({
+      attemptId,
+      data: {
+        questionId: currentQuestion.id,
+        selectedAnswer: answer,
+      },
+    });
   };
 
   // Get current question with selected state
-  const questionWithSelection = {
-    ...currentQuestion,
-    options: currentQuestion.options.map((opt) => ({
-      ...opt,
-      isSelected: selectedAnswers[currentQuestion.id] === opt.id,
-    })),
-  };
+  const questionWithSelection = convertQuestion(currentQuestion, currentQuestionIndex);
 
-  const quickNavQuestions = allQuestions.map((q, index) => ({
-    id: q.id,
+  const quickNavQuestions = questions.map((_q, index) => ({
+    id: index + 1,
     status: questionStatuses[index] as 'attended' | 'not-attended' | 'current',
   }));
 
@@ -179,10 +250,16 @@ const AttendTestPage: React.FC = () => {
         {/* Title Section */}
         <div className="mb-6 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-gray-900 mb-2" style={{ fontFamily: 'General Sans, sans-serif' }}>
+            <h1
+              className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-gray-900 mb-2"
+              style={{ fontFamily: 'General Sans, sans-serif' }}
+            >
               {testData.title}
             </h1>
-            <p className="text-sm sm:text-base text-gray-600" style={{ fontFamily: 'General Sans, sans-serif' }}>
+            <p
+              className="text-sm sm:text-base text-gray-600"
+              style={{ fontFamily: 'General Sans, sans-serif' }}
+            >
               {testData.subtitle}
             </p>
           </div>
@@ -201,7 +278,7 @@ const AttendTestPage: React.FC = () => {
           <QuestionCard
             questionNumber={currentQuestionIndex + 1}
             totalQuestions={testData.totalQuestions}
-            category={currentQuestion.category}
+            category={currentQuestion.subject}
             question={questionWithSelection}
             progress={progress}
             onPrevious={handlePrevious}
@@ -223,10 +300,10 @@ const AttendTestPage: React.FC = () => {
         isOpen={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
         onSubmit={handleConfirmSubmit}
+        isSubmitting={isSubmitting}
       />
     </div>
   );
 };
 
 export default AttendTestPage;
-
