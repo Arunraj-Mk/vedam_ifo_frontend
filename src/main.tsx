@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'react-hot-toast';
 import App from './App';
 import './index.css';
-import '@/interceptors'; // Initialize axios interceptors
+import '@/interceptors'; 
 
 const queryClient = new QueryClient({
   defaultOptions: {
